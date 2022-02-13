@@ -1,0 +1,26 @@
+﻿@model MVC.Models.User
+@{
+    ViewBag.Title = Model.Name;
+}
+<h2>Пользователь @Model.Name</h2>
+<div>
+    <dl class="dl-horizontal">
+        <dt>Идентификатор</dt>
+        <dd>@Model.Id</dd>
+
+        <dt>Имя</dt>
+        <dd>@Model.Name</dd>
+
+        <dt>Фамилия</dt>
+        <dd>@Model.SurName</dd>
+
+        <dt>Возраст</dt>
+        <dd>@Model.Age</dd>
+
+        <dt>Пол</dt>
+        <dd>@Model.Sex</dd>
+
+        <dt>Номер телефона</dt>
+        <dd>@Model.Phone</dd>
+    </dl>
+</div>

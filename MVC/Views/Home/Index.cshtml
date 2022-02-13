@@ -1,0 +1,37 @@
+﻿@model IEnumerable<MVC.Models.User>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h1 class="display-4">Welcome</h1>
+@{
+    ViewBag.Title = "Все пользователи";
+}
+<a asp-action="Create">Добавить пользователя</a>
+<br />
+
+@if (!(User.Identity.IsAuthenticated))
+{
+    <a asp-controller="Account" asp-action="Register">Зарегеистрироваться</a>
+    <br />
+    <a asp-controller="Account" asp-action="Login">Войти</a>
+}
+else
+{
+    <a asp-controller="Account" asp-action="Logout">Выйти</a>
+}
+
+<table class="table">
+    <tr><td>Имя</td><td>Возраст</td></tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>
+                <a asp-action="Details" asp-controller="Home" asp-route-id="@item.Id">Подробнее</a> |
+                <a asp-action="Edit" asp-controller="Home" asp-route-id="@item.Id">Изменить</a> |
+                <a asp-action="Delete" asp-controller="Home" asp-route-id="@item.Id">Удалить</a>
+            </td>
+        </tr>
+    }
+</table>
