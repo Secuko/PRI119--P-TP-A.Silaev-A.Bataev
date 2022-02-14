@@ -22,15 +22,19 @@ else
 }
 
 <table class="table">
-    <tr><td>Имя</td><td>Возраст</td></tr>
-    @foreach (var item in Model)
+    <tr><th>Имя</th><th>Email</th><th></th></tr>
+    @foreach (var user in Model)
     {
         <tr>
-            <td>@item.Name</td>
+            <td>@user.SurName</td>
+            <td>@user.Email</td>
             <td>
-                <a asp-action="Details" asp-controller="Home" asp-route-id="@item.Id">Подробнее</a> |
-                <a asp-action="Edit" asp-controller="Home" asp-route-id="@item.Id">Изменить</a> |
-                <a asp-action="Delete" asp-controller="Home" asp-route-id="@item.Id">Удалить</a>
+                <form asp-action="Delete" asp-route-id="@user.Id" method="post">
+                    <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@user.Id">Изменить</a>
+                    <button type="submit" class="btn btn-sm btn-danger">
+                        Удалить
+                    </button>
+                </form>
             </td>
         </tr>
     }

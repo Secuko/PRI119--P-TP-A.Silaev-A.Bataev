@@ -1,4 +1,4 @@
-﻿@model MVC.Models.User
+﻿@model MVC.ViewModels.CreateUserViewModel
 @{
     ViewBag.Title = "Добавление пользователя";
 }
@@ -11,7 +11,7 @@
         <div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label><br />
-                <input type="text" asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name"></span>
             </div>
             <div class="form-group">
@@ -20,29 +20,17 @@
                 <span asp-validation-for="SurName"></span>
             </div>
             <div class="form-group">
-                @foreach (var sex in Sex)
-                {
-                    <input type="radio" asp-for="Sex" value="@sex" />@sex<br />
-                }
-                <span asp-validation-for="Sex"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Password" class="control-label"></label><br />
                 <input type="password" asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Age" class="control-label"></label><br />
-                <input asp-for="Age" class="form-control" />
-                <span asp-validation-for="Age"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label><br />
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone"></span>
+                <label asp-for="Email" class="control-label"></label><br />
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email"></span>
             </div><br />
             <div class="form-group">
-                <input type="submit" value="Создать" class="btn btn-default" />
+                <input type="submit" value="Создать" class="btn btn-outline-secondary" />
             </div>
         </div>
     </form>

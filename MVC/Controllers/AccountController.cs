@@ -7,40 +7,18 @@ using MVC.ViewModels;
 using MVC.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
+
 namespace MVC.Controllers
 {
     public class AccountController : Controller
     {
-        private ApplicationContext db;
-        public AccountController(ApplicationContext context)
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
         {
-            db = context;
-        }
-
-        [HttpGet]
-        public IActionResult Login()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                User user = await db.Users
-                    .Include(u => u.Role)
-                    .FirstOrDefaultAsync(u => u.Phone == model.Phone && u.Password == model.Password);
-                if (user != null)
-                {
-                    await Authenticate(user); // аутентификация
-
-                    return RedirectToAction("Index", "Home");
-                }
-                ModelState.AddModelError("", "Некорректные логин и(или) пароль");
-            }
-            return View(model);
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         [HttpGet]
@@ -55,45 +33,67 @@ namespace MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await db.Users.FirstOrDefaultAsync(u => u.Phone == model.Phone);
-                if (user == null)
+                User user = new User { Name = model.Name, SurName = model.SurName, Email = model.Email, UserName = model.Email };
+                // добавляем пользователя в бд
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
                 {
-                    // добавляем пользователя в бд
-                    user = new User { Name = model.Name, SurName = model.SurName, Age = model.Age, Sex = model.Sex, Phone = model.Phone, Password = model.Password };
-                    Role userRole = await db.Roles.FirstOrDefaultAsync(r => r.Name == "user");
-                    if (userRole != null)
-                        user.Role = userRole;
-                    db.Users.Add(user);
-                    await db.SaveChangesAsync();
-
-                    await Authenticate(user); // аутентификация
-
+                    // установка куки
+                    await _signInManager.SignInAsync(user, false);
                     return RedirectToAction("Index", "Home");
                 }
                 else
-                    ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
             }
             return View(model);
         }
 
-        private async Task Authenticate(User user)
+        [HttpGet]
+        public IActionResult Login(string returnUrl = null)
         {
-            // создаем один claim
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Phone),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name)
-            };
-            // создаем объект ClaimsIdentity
-            ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-            // установка аутентификационных куки
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+            return View(new LoginModel { ReturnUrl = returnUrl });
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result =
+                    await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                if (result.Succeeded)
+                {
+                    // проверяем, принадлежит ли URL приложению
+                    if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+                    {
+                        return Redirect(model.ReturnUrl);
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Неправильный логин и (или) пароль");
+                }
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login", "Account");
+            // удаляем аутентификационные куки
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

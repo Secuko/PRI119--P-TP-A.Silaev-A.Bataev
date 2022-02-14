@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MVC.Models;
+using MVC.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,94 +15,106 @@ namespace MVC.Controllers
 {
     public class HomeController : Controller
     {
-        private ApplicationContext db;
+        private readonly UserManager<User> _userManager;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationContext context)
+        public HomeController(ILogger<HomeController> logger, UserManager<User> userManager)
         {
             _logger = logger;
-            db = context;
+            _userManager = userManager;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await db.Users.ToListAsync());
+            return View(_userManager.Users.ToList());
         }
 
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         public IActionResult Create()
         {
             return View();
         }
 
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpPost]
-        public async Task<IActionResult> Create(User user)
+        public async Task<IActionResult> Create(CreateUserViewModel model)
         {
-            db.Users.Add(user);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id != null)
+            if (ModelState.IsValid)
             {
-                User user = await db.Users.FirstOrDefaultAsync(p => p.Id == id);
-                if (user != null)
-                    return View(user);
-            }
-            return NotFound();
-        }
-
-        [Authorize(Roles = "admin")]
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id != null)
-            {
-                User user = await db.Users.FirstOrDefaultAsync(p => p.Id == id);
-                if (user != null)
-                    return View(user);
-            }
-            return NotFound();
-        }
-
-        [Authorize(Roles = "admin")]
-        [HttpPost]
-        public async Task<IActionResult> Edit(User user)
-        {
-            db.Users.Update(user);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-
-        [HttpGet]
-        [ActionName("Delete")]
-        public async Task<IActionResult> ConfirmDelete(int? id)
-        {
-            if (id != null)
-            {
-                User user = await db.Users.FirstOrDefaultAsync(p => p.Id == id);
-                if (user != null)
-                    return View(user);
-            }
-            return NotFound();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id != null)
-            {
-                User user = await db.Users.FirstOrDefaultAsync(p => p.Id == id);
-                if (user != null)
+                User user = new User { Name = model.Name, SurName = model.SurName, Email = model.Email, UserName = model.Email };
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
                 {
-                    db.Users.Remove(user);
-                    await db.SaveChangesAsync();
                     return RedirectToAction("Index");
                 }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
             }
+            return View(model);
+        }
+
+        public IActionResult Details()
+        {
             return NotFound();
+        }
+
+        //[Authorize(Roles = "admin")]
+        public async Task<IActionResult> Edit(string id)
+        {
+            User user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            EditUserViewModel model = new EditUserViewModel { Id = user.Id, Email = user.Email, Name = user.Name, SurName = user.SurName };
+            return View(model);
+        }
+
+        //[Authorize(Roles = "admin")]
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                User user = await _userManager.FindByIdAsync(model.Id);
+                if (user != null)
+                {
+                    user.Email = model.Email;
+                    user.UserName = model.Email;
+                    user.Name = model.Name;
+                    user.SurName = model.SurName;
+
+                    var result = await _userManager.UpdateAsync(user);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        foreach (var error in result.Errors)
+                        {
+                            ModelState.AddModelError(string.Empty, error.Description);
+                        }
+                    }
+                }
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Delete(string id)
+        {
+            User user = await _userManager.FindByIdAsync(id);
+            if (user != null)
+            {
+                IdentityResult result = await _userManager.DeleteAsync(user);
+            }
+            return RedirectToAction("Index");
         }
 
         public IActionResult Privacy()

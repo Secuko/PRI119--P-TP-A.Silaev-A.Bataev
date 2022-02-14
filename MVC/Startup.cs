@@ -29,7 +29,7 @@ namespace MVC
             string connection = Configuration.GetConnectionString("DefaultConnection");
             // добавл€ем контекст ApplicationContext в качестве сервиса в приложение
             services.AddDbContext<ApplicationContext>(options =>
-                options.UseSqlServer(connection));
+               options.UseSqlServer(connection));
 
             // установка конфигурации подключени€
             services.AddIdentity<User, IdentityRole>()
@@ -50,13 +50,14 @@ namespace MVC
                
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
 
             app.UseAuthentication();
-            app.UseAuthorization();
+            app.UseAuthorization();           
 
             app.UseEndpoints(endpoints =>
             {
