@@ -29,13 +29,13 @@ namespace MVC.Controllers
             return View(_userManager.Users.ToList());
         }
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         public IActionResult Create()
         {
             return View();
         }
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> Create(CreateUserViewModel model)
         {
@@ -45,6 +45,7 @@ namespace MVC.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, "user");
                     return RedirectToAction("Index");
                 }
                 else
@@ -63,7 +64,7 @@ namespace MVC.Controllers
             return NotFound();
         }
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(string id)
         {
             User user = await _userManager.FindByIdAsync(id);
@@ -75,7 +76,7 @@ namespace MVC.Controllers
             return View(model);
         }
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> Edit(EditUserViewModel model)
         {
@@ -106,6 +107,7 @@ namespace MVC.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<ActionResult> Delete(string id)
         {

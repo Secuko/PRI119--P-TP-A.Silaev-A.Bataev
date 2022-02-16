@@ -5,7 +5,7 @@ namespace MVC.ViewModels
     public class LoginModel
     {
         [Required(ErrorMessage = "Не указан номер телефона")]
-        [Phone(ErrorMessage = "Введите корректные данные")]
+        [EmailAddress(ErrorMessage = "Введите корректные данные")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Не указан пароль")]

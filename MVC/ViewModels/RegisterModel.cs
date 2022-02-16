@@ -14,9 +14,6 @@ namespace MVC.ViewModels
         [Required(ErrorMessage = "Не указана фамилия")]
         public string SurName { get; set; }
 
-        [Required(ErrorMessage = "Не указан возраст")]
-        public int Age { get; set; }
-
         [Required(ErrorMessage = "Не указан электронный адрес")]
         [EmailAddress(ErrorMessage = "Введите корректные данные")]
         public string Email { get; set; }

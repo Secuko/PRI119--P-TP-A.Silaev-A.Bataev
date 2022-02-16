@@ -32,7 +32,9 @@ namespace MVC
                options.UseSqlServer(connection));
 
             // установка конфигурации подключения
-            services.AddIdentity<User, IdentityRole>()
+            services.AddIdentity<User, IdentityRole>(opts => {
+                    opts.User.RequireUniqueEmail = true;
+                })
                 .AddEntityFrameworkStores<ApplicationContext>();
 
             services.AddControllersWithViews();

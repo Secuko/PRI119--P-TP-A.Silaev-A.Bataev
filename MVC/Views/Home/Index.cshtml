@@ -15,10 +15,14 @@
     <a asp-controller="Account" asp-action="Register">Зарегеистрироваться</a>
     <br />
     <a asp-controller="Account" asp-action="Login">Войти</a>
+    <br />
 }
 else
 {
-    <a asp-controller="Account" asp-action="Logout">Выйти</a>
+    <a asp-controller="Account" asp-action="ChangePassword">Сменить пароль</a><br />
+    <form method="post" asp-controller="Account" asp-action="Logout">
+        <input type="submit" value="Выход" />
+    </form>
 }
 
 <table class="table">
