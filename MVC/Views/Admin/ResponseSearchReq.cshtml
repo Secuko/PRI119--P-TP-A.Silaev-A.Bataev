@@ -1,0 +1,36 @@
+﻿@model MVC.Models.SearchRequest
+@{
+    ViewData["Title"] = "Заявка на поиск";
+}
+
+<h1 class="display-4">Заявки на поиск</h1>
+
+<table class="table table-bordered">
+    <tr>
+        <th>ФИО</th>
+        <td>@Model.FullName</td>
+    </tr>
+    <tr>
+        <th>Возраст</th>
+        <td>@Model.Age</td>
+    </tr>
+    <tr>
+        <th>Пол</th>
+        <td>@Model.Sex</td>
+    </tr>
+    <tr>
+        <th>Область пропажи</th>
+        <td>@Model.MissArea</td>
+    </tr>
+    <tr>
+        <th>Время пропажи</th>
+        <td>@Model.MissTime</td>
+    </tr>
+    <tr>
+        <th>Доп. информация</th>
+        <td>@Model.AddInf</td>
+    </tr>
+</table>
+
+<a class="btn btn-sm btn-primary" asp-controller="Admin" asp-action="DeclineSearchReq" asp-route-id="@Model.Id">Принять</a>
+<a class="btn btn-sm btn-danger" asp-controller="Admin" asp-action="AcceptSearchReq" asp-route-id="@Model.Id">Отклонить</a>

@@ -1,0 +1,32 @@
+﻿@model MVC.Models.VolRequest
+@{
+    ViewData["Title"] = "Заявка в волонтёры";
+}
+
+<h1 class="display-4">Заявка в волонтёры</h1>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Пользователь</th>
+        <td>@Model.User.Name @Model.User.SurName</td>
+    </tr>
+    <tr>
+        <th>Номер телефона</th>
+        <td>@Model.Phone</td>
+    </tr>
+    <tr>
+        <th>Возраст</th>
+        <td>@Model.Age</td>
+    </tr>
+    <tr>
+        <th>Пол</th>
+        <td>@Model.Sex</td>
+    </tr>
+    <tr>
+        <th>Область проживания</th>
+        <td>@Model.LivArea</td>
+    </tr>
+</table>
+
+<a class="btn btn-sm btn-primary" asp-controller="Admin" asp-action="DeclineVolReq" asp-route-id="@Model.Id">Принять</a>
+<a class="btn btn-sm btn-danger" asp-controller="Admin" asp-action="AcceptVolReq" asp-route-id="@Model.Id">Отклонить</a>

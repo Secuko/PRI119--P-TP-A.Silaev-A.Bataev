@@ -123,14 +123,25 @@ namespace MVC.Controllers
             return View(_db.SearchRequests.Include(s => s.User).ToList());
         }
 
-        public IActionResult ResponseVolReq()
+        public async Task<ActionResult> ResponseVolReq(int id)
         {
-            return View(_db.VolRequests.Include(v => v.User).ToList());
+            VolRequest volReq = await _db.VolRequests.Include(v => v.User).FirstOrDefaultAsync(v => v.Id == id);
+            if (volReq == null)
+            {
+                return NotFound();
+            }
+            return View(volReq);
         }
 
-        public IActionResult ResponseSearchReq(int id)
+        [HttpGet]
+        public async Task<ActionResult> ResponseSearchReq(int id)
         {
-            return View(_db.SearchRequests.Include(s => s.User).ToList());
+            SearchRequest searchReq = await _db.SearchRequests.FirstOrDefaultAsync(s => s.Id == id);
+            if (searchReq == null)
+            {
+                return NotFound();
+            }
+            return View(searchReq);
         }
     }
 }
