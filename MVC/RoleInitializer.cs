@@ -21,6 +21,11 @@ namespace MVC
             {
                 await roleManager.CreateAsync(new IdentityRole("user"));
             }
+            if (await roleManager.FindByNameAsync("volunteer") == null)
+            {
+                await roleManager.CreateAsync(new IdentityRole("volunteer"));
+            }
+ 
             if (await userManager.FindByNameAsync(adminEmail) == null)
             {
                 User admin = new User { Email = adminEmail, UserName = adminEmail, Name = "admin", SurName = "admin" };

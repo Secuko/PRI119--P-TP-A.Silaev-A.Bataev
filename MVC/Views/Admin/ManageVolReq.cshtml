@@ -1,0 +1,24 @@
+﻿@model IEnumerable<MVC.Models.VolRequest>
+@{
+    ViewData["Title"] = "Заявки в волонтёры";
+}
+
+<h1 class="display-4">Заявки в волонтёры</h1>
+@{
+    ViewBag.Title = "Заявки в волонтёры";
+}
+
+<table class="table">
+    <tr><th>Имя</th><th>Email</th><th>Номер телефона</th><th></th></tr>
+    @foreach (var request in Model)
+    {
+        <tr>
+            <td>@request.User.SurName @request.User.Name</td>
+            <td>@request.User.Email</td>
+            <td>@request.Phone</td>
+            <td>
+                <a class="btn btn-sm btn-primary" asp-controller="Admin" asp-action="ResponseVolReq" asp-route-id="@request.Id">Просмотреть</a>
+            </td>
+        </tr>
+    }
+</table>

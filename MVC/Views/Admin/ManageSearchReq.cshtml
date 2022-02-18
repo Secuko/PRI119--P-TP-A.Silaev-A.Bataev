@@ -1,0 +1,23 @@
+﻿@model IEnumerable<MVC.Models.SearchRequest>
+@{
+    ViewData["Title"] = "Заявки на поиск";
+}
+
+<h1 class="display-4">Заявки на поиск</h1>
+@{
+    ViewBag.Title = "Заявки на поиск";
+}
+
+<table class="table">
+    <tr><th>Имя</th><th>Email</th><th></th></tr>
+    @foreach (var request in Model)
+    {
+        <tr>
+            <td>@request.User.SurName @request.User.Name</td>
+            <td>@request.User.Email</td>
+            <td>
+                <a class="btn btn-sm btn-primary" asp-controller="Admin" asp-action="ResponseSearchReq" asp-route-id="@request.Id">Просмотреть</a>
+            </td>
+        </tr>
+    }
+</table>

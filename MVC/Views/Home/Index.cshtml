@@ -7,39 +7,28 @@
 @{
     ViewBag.Title = "Все пользователи";
 }
-<a asp-action="Create">Добавить пользователя</a>
-<br />
 
-@if (!(User.Identity.IsAuthenticated))
+@if (User.IsInRole("admin"))
 {
-    <a asp-controller="Account" asp-action="Register">Зарегеистрироваться</a>
-    <br />
-    <a asp-controller="Account" asp-action="Login">Войти</a>
-    <br />
-}
-else
-{
-    <a asp-controller="Account" asp-action="ChangePassword">Сменить пароль</a><br />
-    <form method="post" asp-controller="Account" asp-action="Logout">
-        <input type="submit" value="Выход" />
-    </form>
+    <a asp-controller="Admin" asp-action="AdminPanel">Управление</a><br />
 }
 
-<table class="table">
-    <tr><th>Имя</th><th>Email</th><th></th></tr>
-    @foreach (var user in Model)
+    @if (!(User.Identity.IsAuthenticated))
     {
-        <tr>
-            <td>@user.SurName</td>
-            <td>@user.Email</td>
-            <td>
-                <form asp-action="Delete" asp-route-id="@user.Id" method="post">
-                    <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@user.Id">Изменить</a>
-                    <button type="submit" class="btn btn-sm btn-danger">
-                        Удалить
-                    </button>
-                </form>
-            </td>
-        </tr>
+        <a asp-controller="Account" asp-action="Register">Зарегеистрироваться</a>
+        <br />
+        <a asp-controller="Account" asp-action="Login">Войти</a>
+        <br />
     }
-</table>
+    else
+    {
+        <a asp-controller="Account" asp-action="ChangePassword">Сменить пароль</a>
+        <br />
+        <a asp-controller="Home" asp-action="SearchReq">Подать заявку на поиск</a>
+        <br />
+        <a asp-controller="Home" asp-action="VolReq">Стать волонтёром</a>
+        <br />
+        <form method="post" asp-controller="Account" asp-action="Logout">
+            <input type="submit" value="Выход" />
+        </form>
+    }

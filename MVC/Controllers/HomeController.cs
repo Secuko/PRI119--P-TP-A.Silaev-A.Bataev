@@ -16,112 +16,59 @@ namespace MVC.Controllers
     public class HomeController : Controller
     {
         private readonly UserManager<User> _userManager;
+        private readonly ApplicationContext _db;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger, UserManager<User> userManager)
+        public HomeController(ILogger<HomeController> logger, UserManager<User> userManager, ApplicationContext db)
         {
             _logger = logger;
             _userManager = userManager;
+            _db = db;
         }
 
         public IActionResult Index()
         {
-            return View(_userManager.Users.ToList());
+            return View();
         }
 
-        [Authorize(Roles = "admin")]
-        public IActionResult Create()
+        [HttpGet]
+        public IActionResult VolReq()
         {
             return View();
         }
 
-        [Authorize(Roles = "admin")]
         [HttpPost]
-        public async Task<IActionResult> Create(CreateUserViewModel model)
+        public async Task<IActionResult> VolReq(VolRequestViewModel model)
         {
             if (ModelState.IsValid)
             {
-                User user = new User { Name = model.Name, SurName = model.SurName, Email = model.Email, UserName = model.Email };
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    await _userManager.AddToRoleAsync(user, "user");
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                }
+                VolRequest volReq = new VolRequest { Age = model.Age, Sex = model.Sex, LivArea = model.LivArea, Phone = model.Phone, UserId = _userManager.GetUserId(User)};
+                // добавляем заявку в бд
+                _db.VolRequests.Add(volReq);
+                await _db.SaveChangesAsync();      
+                return RedirectToAction("Index", "Home");
             }
             return View(model);
         }
 
-        public IActionResult Details()
-        {
-            return NotFound();
-        }
-
-        [Authorize(Roles = "admin")]
-        public async Task<IActionResult> Edit(string id)
-        {
-            User user = await _userManager.FindByIdAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            EditUserViewModel model = new EditUserViewModel { Id = user.Id, Email = user.Email, Name = user.Name, SurName = user.SurName };
-            return View(model);
-        }
-
-        [Authorize(Roles = "admin")]
-        [HttpPost]
-        public async Task<IActionResult> Edit(EditUserViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                User user = await _userManager.FindByIdAsync(model.Id);
-                if (user != null)
-                {
-                    user.Email = model.Email;
-                    user.UserName = model.Email;
-                    user.Name = model.Name;
-                    user.SurName = model.SurName;
-
-                    var result = await _userManager.UpdateAsync(user);
-                    if (result.Succeeded)
-                    {
-                        return RedirectToAction("Index");
-                    }
-                    else
-                    {
-                        foreach (var error in result.Errors)
-                        {
-                            ModelState.AddModelError(string.Empty, error.Description);
-                        }
-                    }
-                }
-            }
-            return View(model);
-        }
-
-        [Authorize(Roles = "admin")]
-        [HttpPost]
-        public async Task<ActionResult> Delete(string id)
-        {
-            User user = await _userManager.FindByIdAsync(id);
-            if (user != null)
-            {
-                IdentityResult result = await _userManager.DeleteAsync(user);
-            }
-            return RedirectToAction("Index");
-        }
-
-        public IActionResult Privacy()
+        [HttpGet]
+        public IActionResult SearchReq()
         {
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SearchReq(SearchRequestViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                SearchRequest searchReq = new SearchRequest {FullName = model.FullName, Age = model.Age, Sex = model.Sex, MissArea = model.MissArea, MissTime = model.MissTime, AddInf = model.AddInf, UserId = _userManager.GetUserId(User) };
+                // добавляем заявку в бд
+                _db.SearchRequests.Add(searchReq);
+                await _db.SaveChangesAsync();
+                return RedirectToAction("Index", "Home");
+            }
+            return View(model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

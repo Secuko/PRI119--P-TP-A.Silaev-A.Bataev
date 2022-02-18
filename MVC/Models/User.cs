@@ -16,13 +16,9 @@ namespace MVC.Models
 
         [Required(ErrorMessage = "Не указана фамилия")]
         public string SurName { get; set; }
+        public SearchRequest SearchRequest { get; set; }
+        public VolRequest VolRequest { get; set; }
 
         public User() { }
-
-        public User(string name, string surName)
-        {
-            Name = name;
-            SurName = surName;
-        }
     }
 }

@@ -1,0 +1,49 @@
+﻿@model MVC.ViewModels.SearchRequestViewModel
+
+@{
+    string[] Sex = new[] { "Мужской", "Женский" };
+}
+
+<h2>Введите данные</h2>
+
+<form method="post" asp-action="SearchReq" asp-controller="Home" asp-anti-forgery="true">
+    <div class="validation" asp-validation-summary="ModelOnly"></div>
+    <div>
+        <div class="form-group">
+            <label asp-for="FullName" class="control-label">ФИО</label><br />
+            <input asp-for="FullName" class="form-control" />
+            <span asp-validation-for="FullName"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Age" class="control-label">Возраст</label><br />
+            <input asp-for="Age" class="form-control" />
+            <span asp-validation-for="Age"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Sex" class="control-label">Пол</label><br />
+            @foreach (var sex in Sex)
+            {
+                <input type="radio" asp-for="Sex" value="@sex" />@sex<br />
+            }
+            <span asp-validation-for="Sex"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="MissArea" class="control-label">Область пропажи</label><br />
+            <input asp-for="MissArea" class="form-control" />
+            <span asp-validation-for="MissArea"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="MissTime" class="control-label">Время пропажи</label><br />
+            <input asp-for="MissTime" class="form-control" />
+            <span asp-validation-for="MissTime"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="AddInf" class="control-label">Дополнительная информация</label><br />
+            <textarea asp-for="AddInf" class="form-control"></textarea>
+            <span asp-validation-for="AddInf"></span>
+        </div>
+        <div>
+            <input type="submit" value="Регистрация" />
+        </div>
+    </div>
+</form>

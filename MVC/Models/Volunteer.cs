@@ -9,18 +9,9 @@ namespace MVC.Models
 {
     public class Volunteer : User
     {
-        [Required(ErrorMessage = "Не указан пол")]
+        public string Phone { get; set; }
         public string Sex { get; set; }
-        [Required(ErrorMessage = "Не указан возраст")]
         public int Age { get; set; }
         public string LivArea { get; set; }
-
-        public Volunteer(string name, string surName, string sex, int age, string livArea)
-            : base(name, surName)
-        {
-            Sex = sex;
-            Age = age;
-            LivArea = livArea;
-        }
     }
 }
