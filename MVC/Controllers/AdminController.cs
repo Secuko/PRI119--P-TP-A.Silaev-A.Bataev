@@ -143,5 +143,24 @@ namespace MVC.Controllers
             }
             return View(searchReq);
         }
+
+        [HttpGet]
+        public async Task<ActionResult> AcceptVolReq(int id)
+        {
+            VolRequest volReq = await _db.VolRequests.Include(v => v.User).FirstOrDefaultAsync(v => v.Id == id);
+            await _userManager.AddToRoleAsync(volReq.User, "volunteer");
+            _db.VolRequests.Remove(volReq);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("ManageVolReq");
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> DeclineVolReq(int id)
+        {
+            VolRequest volReq = await _db.VolRequests.FirstOrDefaultAsync(v => v.Id == id);
+            _db.VolRequests.Remove(volReq);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("ManageVolReq");
+        }
     }
 }
