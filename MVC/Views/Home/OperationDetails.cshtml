@@ -1,0 +1,50 @@
+﻿@model MVC.Models.Operation
+@{
+    ViewData["Title"] = "Информация об операции";
+}
+
+<table class="table table-bordered">
+    <tr>
+        <th>ФИО</th>
+        <td>@Model.SearchRequest.FullName</td>
+    </tr>
+    <tr>
+        <th>Возраст</th>
+        <td>@Model.SearchRequest.Age</td>
+    </tr>
+    <tr>
+        <th>Пол</th>
+        <td>@Model.SearchRequest.Sex</td>
+    </tr>
+    <tr>
+        <th>Область пропажи</th>
+        <td>@Model.SearchRequest.MissArea</td>
+    </tr>
+    <tr>
+        <th>Время пропажи</th>
+        <td>@Model.SearchRequest.MissTime</td>
+    </tr>
+    <tr>
+        <th>Доп. информация</th>
+        <td>@Model.SearchRequest.AddInf</td>
+    </tr>
+    <tr>
+        <th>Список участников</th>
+        <td>
+            <ul>
+                @foreach (var user in Model.Users)
+                {
+                    <li>
+                        @user.SurName @user.Name
+                    </li>
+                }
+            </ul>
+        </td>
+    </tr>
+</table>
+
+@if (User.IsInRole("volunteer") && !Model.Users.Contains(ViewBag.User))
+{
+    <a class="btn btn-sm btn-primary" asp-controller="Home" asp-action="JoinOperation" asp-route-id="@Model.Id">Присоединиться</a>
+}
+<a class="btn btn-sm" asp-action="CheckOperations">Назад</a>

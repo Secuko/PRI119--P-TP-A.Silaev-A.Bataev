@@ -17,6 +17,7 @@ namespace MVC.Models
         public string Sex { get; set; }
         [Required]
         public string LivArea { get; set; }
+        public string Status { get; set; }
         [Required]
         public string UserId { get; set; }
         public User User { get; set; }

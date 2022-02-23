@@ -88,7 +88,7 @@ namespace MVC.Controllers
                     var result = await _userManager.UpdateAsync(user);
                     if (result.Succeeded)
                     {
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("AdminPanel");
                     }
                     else
                     {
@@ -110,17 +110,17 @@ namespace MVC.Controllers
             {
                 IdentityResult result = await _userManager.DeleteAsync(user);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("AdminPanel");
         }
 
         public IActionResult ManageVolReq()
         {
-            return View(_db.VolRequests.Include(v => v.User).ToList());
+            return View(_db.VolRequests.Include(v => v.User).Where(v => v.Status == "Ожидание"));
         }
 
         public IActionResult ManageSearchReq()
         {
-            return View(_db.SearchRequests.Include(s => s.User).ToList());
+            return View(_db.SearchRequests.Include(s => s.User).Where(s => s.Status == "Ожидание"));
         }
 
         public async Task<ActionResult> ResponseVolReq(int id)
@@ -148,8 +148,8 @@ namespace MVC.Controllers
         public async Task<ActionResult> AcceptVolReq(int id)
         {
             VolRequest volReq = await _db.VolRequests.Include(v => v.User).FirstOrDefaultAsync(v => v.Id == id);
+            volReq.Status = "Принята";
             await _userManager.AddToRoleAsync(volReq.User, "volunteer");
-            _db.VolRequests.Remove(volReq);
             await _db.SaveChangesAsync();
             return RedirectToAction("ManageVolReq");
         }
@@ -161,6 +161,50 @@ namespace MVC.Controllers
             _db.VolRequests.Remove(volReq);
             await _db.SaveChangesAsync();
             return RedirectToAction("ManageVolReq");
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> AcceptSearchReq(int id)
+        {
+            SearchRequest searchReq = await _db.SearchRequests.FirstOrDefaultAsync(s => s.Id == id);            
+            searchReq.Status = "Принята";
+            Operation operation = new Operation() {Status = "Ожидание", SearchRequestId = searchReq.Id };
+            _db.Operations.Add(operation);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("ManageSearchReq");
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> DeclineSearchReq(int id)
+        {
+            SearchRequest searchReq = await _db.SearchRequests.FirstOrDefaultAsync(s => s.Id == id);
+            _db.SearchRequests.Remove(searchReq);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("ManageSearchReq");
+        }
+
+        [HttpGet]
+        public ActionResult GetOperations()
+        {
+            return View(_db.Operations.Include(o => o.SearchRequest).Include(o => o.Users).ToList());
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> StartOperation(int id)
+        {
+            Operation operation = await _db.Operations.FirstOrDefaultAsync(o => o.Id == id);
+            operation.Status = "Активная";
+            await _db.SaveChangesAsync();
+            return RedirectToAction("GetOperations");
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> StopOperation(int id)
+        {
+            Operation operation = await _db.Operations.FirstOrDefaultAsync(o => o.Id == id);
+            operation.Status = "Завершённая";
+            await _db.SaveChangesAsync();
+            return RedirectToAction("GetOperations");
         }
     }
 }

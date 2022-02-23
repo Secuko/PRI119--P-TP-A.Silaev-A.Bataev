@@ -9,7 +9,7 @@
 }
 
 <table class="table">
-    <tr><th>Имя</th><th>Email</th><th>Номер телефона</th><th></th></tr>
+    <tr><th>Пользователь</th><th>Email</th><th>Номер телефона</th><th></th></tr>
     @foreach (var request in Model)
     {
         <tr>
@@ -22,3 +22,5 @@
         </tr>
     }
 </table>
+<br />
+<a class="btn btn-sm btn-secondary" asp-action="AdminPanel">Назад</a>

@@ -24,6 +24,8 @@ namespace MVC.Models
         public string MissTime { get; set; }
         public string AddInf { get; set; }
         [Required]
+        public string Status { get; set; }
+        [Required]
         public string UserId { get; set; }
         public User User { get; set; }
 

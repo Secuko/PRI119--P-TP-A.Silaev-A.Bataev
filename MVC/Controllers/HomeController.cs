@@ -42,7 +42,7 @@ namespace MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                VolRequest volReq = new VolRequest { Age = model.Age, Sex = model.Sex, LivArea = model.LivArea, Phone = model.Phone, UserId = _userManager.GetUserId(User)};
+                VolRequest volReq = new VolRequest { Age = model.Age, Sex = model.Sex, LivArea = model.LivArea, Phone = model.Phone, Status = "Ожидание", UserId = _userManager.GetUserId(User)};
                 // добавляем заявку в бд
                 _db.VolRequests.Add(volReq);
                 await _db.SaveChangesAsync();      
@@ -62,7 +62,7 @@ namespace MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                SearchRequest searchReq = new SearchRequest {FullName = model.FullName, Age = model.Age, Sex = model.Sex, MissArea = model.MissArea, MissTime = model.MissTime, AddInf = model.AddInf, UserId = _userManager.GetUserId(User) };
+                SearchRequest searchReq = new SearchRequest {FullName = model.FullName, Age = model.Age, Sex = model.Sex, MissArea = model.MissArea, MissTime = model.MissTime, AddInf = model.AddInf, Status = "Ожидание", UserId = _userManager.GetUserId(User) };
                 // добавляем заявку в бд
                 _db.SearchRequests.Add(searchReq);
                 await _db.SaveChangesAsync();
@@ -70,6 +70,36 @@ namespace MVC.Controllers
             }
             return View(model);
         }
+
+        public IActionResult CheckOperations()
+        {
+            return View(_db.Operations.Include(o => o.SearchRequest).ToList());
+        }
+
+        public async Task<IActionResult> OperationDetails(int id)
+        {
+            Operation operation = await _db.Operations.Include(o => o.SearchRequest).Include(o => o.Users).FirstOrDefaultAsync(o => o.Id == id);
+            if (operation == null)
+            {
+                return NotFound();
+            }
+            ViewBag.User = await _userManager.GetUserAsync(User);
+            return View(operation);
+        }
+
+        public async Task<IActionResult> JoinOperation(int id)
+        {
+            User user = await _userManager.GetUserAsync(User);
+            Operation operation = await _db.Operations.FirstOrDefaultAsync(o => o.Id == id);
+            if (user == null || operation == null)
+            {
+                return NotFound();
+            }
+            operation.Users.Add(user);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("OperationDetails", "Home", new { id = id });
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

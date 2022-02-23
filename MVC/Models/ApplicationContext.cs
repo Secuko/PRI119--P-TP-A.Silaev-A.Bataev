@@ -11,6 +11,7 @@ namespace MVC.Models
     {
         public DbSet<SearchRequest> SearchRequests { get; set; }
         public DbSet<VolRequest> VolRequests { get; set; }
+        public DbSet<Operation> Operations { get; set; }
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)
         {

@@ -1,0 +1,92 @@
+﻿@model IEnumerable<MVC.Models.Operation>
+@{
+    ViewData["Title"] = "Операции";
+}
+
+<h1 class="display-4">Операции</h1>
+<br />
+<div class="operations-group">
+    <div class="container">
+        <div class="operations-group__row">
+            <span class="operations-group__label"
+                  onclick="view('hd-1'); return false">Готовящиеся операции</span>
+            <div id="hd-1" class="operations-group__list">
+                <table class="table">
+                    <tr><th>Имя</th><th>Статус</th><th></th></tr>
+                    @foreach (var operation in Model)
+                    {
+                        if (operation.Status == "Ожидание")
+                        {
+                            <tr>
+                                <td>@operation.SearchRequest.FullName</td>
+                                <td>@operation.SearchRequest.Status</td>
+                                <td>
+                                    <a class="btn btn-sm btn-primary" asp-controller="Admin" asp-action="StartOperation" asp-route-id="@operation.Id">Начать</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+        </div>
+
+        <div class="operations-group__row">
+            <span class="operations-group__label"
+                  onclick="view('hd-2'); return false">Активные операции</span>
+            <div id="hd-2" class="operations-group__list">
+                <table class="table">
+                    <tr><th>Имя</th><th>Статус</th><th></th></tr>
+                    @foreach (var operation in Model)
+                    {
+                        if (operation.Status == "Активная")
+                        {
+                            <tr>
+                                <td>@operation.SearchRequest.FullName</td>
+                                <td>@operation.SearchRequest.Status</td>
+                                <td>
+                                    <a class="btn btn-sm btn-outline-secondary" asp-controller="Admin" asp-action="StopOperation" asp-route-id="@operation.Id">Завершить</a>
+                                </td>
+                            </tr>
+
+                        }
+                    }
+                </table>
+            </div>
+        </div>
+
+        <div class="operations-group__row">
+            <span class="operations-group__label"
+                  onclick="view('hd-3'); return false">Завершённые операции</span>
+            <div id="hd-3" class="operations-group__list">
+                <table class="table">
+                    <tr><th>Имя</th><th>Статус</th><th></th></tr>
+                    @foreach (var operation in Model)
+                    {
+                        if (operation.Status == "Завершённая")
+                        {
+                            <tr>
+                                <td>@operation.SearchRequest.FullName</td>
+                                <td>@operation.SearchRequest.Status</td>
+                                <td>
+                                    <a class="btn btn-sm btn-outline-secondary" asp-controller="Admin" asp-action="StopOperation" asp-route-id="@operation.Id">Завершить</a>
+                                </td>
+                            </tr>
+
+                        }
+                    }
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<br />
+<a class="btn btn-sm btn-secondary" asp-controller="Admin" asp-action="AdminPanel">Назад</a>
+
+<script>
+    function view(n) {
+        style = document.getElementById(n).style;
+        style.display = style.display == "block" ? "none" : "block";
+    }
+</script>

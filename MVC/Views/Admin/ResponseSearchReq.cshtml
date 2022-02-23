@@ -32,5 +32,7 @@
     </tr>
 </table>
 
-<a class="btn btn-sm btn-primary" asp-controller="Admin" asp-action="DeclineSearchReq" asp-route-id="@Model.Id">Принять</a>
-<a class="btn btn-sm btn-danger" asp-controller="Admin" asp-action="AcceptSearchReq" asp-route-id="@Model.Id">Отклонить</a>
+<a class="btn btn-sm btn-primary" asp-controller="Admin" asp-action="AcceptSearchReq" asp-route-id="@Model.Id">Принять</a>
+<a class="btn btn-sm btn-danger" asp-controller="Admin" asp-action="DeclineSearchReq" asp-route-id="@Model.Id">Отклонить</a>
+<br />
+<a class="btn btn-sm" asp-action="ManageSearchReq">Назад</a>

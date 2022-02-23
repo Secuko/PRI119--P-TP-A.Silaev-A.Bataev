@@ -98,6 +98,47 @@ namespace MVC.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public async Task<IActionResult> EditProfile()
+        {
+            User user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            UserProfileViewModel model = new UserProfileViewModel { Email = user.Email, Name = user.Name, SurName = user.SurName };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditProfile(EditUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                User user = await _userManager.GetUserAsync(User);
+                if (user != null)
+                {
+                    user.Email = model.Email;
+                    user.UserName = model.Email;
+                    user.Name = model.Name;
+                    user.SurName = model.SurName;
+
+                    var result = await _userManager.UpdateAsync(user);
+                    if (result.Succeeded)
+                    {
+                        return View(model);
+                    }
+                    else
+                    {
+                        foreach (var error in result.Errors)
+                        {
+                            ModelState.AddModelError(string.Empty, error.Description);
+                        }
+                    }
+                }
+            }
+            return View(model);
+        }
+
         public IActionResult ChangePassword()
         {
             return View(new ChangePasswordViewModel());

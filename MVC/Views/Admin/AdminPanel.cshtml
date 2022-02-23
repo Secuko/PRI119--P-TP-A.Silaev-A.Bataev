@@ -4,23 +4,23 @@
 }
 
 <h1 class="display-4">Welcome</h1>
-@{
-    ViewBag.Title = "Все пользователи";
-}
-<a asp-controller="Admin" asp-action="ManageVolReq">Заявки в волонтёры</a>
+
+<a class="main-menu__link" asp-controller="Admin" asp-action="ManageVolReq">Заявки в волонтёры</a>
 <br />
-<a asp-controller="Admin" asp-action="ManageSearchReq">Заявки на поиск</a>
+<a class="main-menu__link" asp-controller="Admin" asp-action="ManageSearchReq">Заявки на поиск</a>
+<br />
+<a class="main-menu__link" asp-controller="Admin" asp-action="GetOperations">Операции</a>
 <br />
 <br />
 <br />
-<a asp-controller="Admin" asp-action="Create">Добавить пользователя</a>
+<a class="main-menu__link" asp-controller="Admin" asp-action="Create">Добавить пользователя</a>
 <br />
 <table class="table">
     <tr><th>Имя</th><th>Email</th><th></th></tr>
     @foreach (var user in Model)
     {
         <tr>
-            <td>@user.SurName</td>
+            <td>@user.SurName @user.Name</td>
             <td>@user.Email</td>
             <td>
                 <form asp-controller="Admin" asp-action="Delete" asp-route-id="@user.Id" method="post">
@@ -33,3 +33,5 @@
         </tr>
     }
 </table>
+<br />
+<a class="btn btn-sm btn-secondary" asp-controller="Home" asp-action="Index">Назад</a>

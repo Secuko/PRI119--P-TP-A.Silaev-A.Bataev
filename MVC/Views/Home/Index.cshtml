@@ -4,31 +4,22 @@
 }
 
 <h1 class="display-4">Welcome</h1>
-@{
-    ViewBag.Title = "Все пользователи";
-}
 
 @if (User.IsInRole("admin"))
 {
-    <a asp-controller="Admin" asp-action="AdminPanel">Управление</a><br />
+    <a class="main-menu__link" asp-controller="Admin" asp-action="AdminPanel">Управление</a>
 }
 
-    @if (!(User.Identity.IsAuthenticated))
+@if (User.Identity.IsAuthenticated)
+{   
+    <a class="main-menu__link" asp-controller="Home" asp-action="SearchReq">Подать заявку на поиск</a>
+    @if (!User.IsInRole("volunteer"))
     {
-        <a asp-controller="Account" asp-action="Register">Зарегеистрироваться</a>
-        <br />
-        <a asp-controller="Account" asp-action="Login">Войти</a>
-        <br />
+        <a class="main-menu__link" asp-controller="Home" asp-action="VolReq">Стать волонтёром</a>
     }
-    else
-    {
-        <a asp-controller="Account" asp-action="ChangePassword">Сменить пароль</a>
-        <br />
-        <a asp-controller="Home" asp-action="SearchReq">Подать заявку на поиск</a>
-        <br />
-        <a asp-controller="Home" asp-action="VolReq">Стать волонтёром</a>
-        <br />
-        <form method="post" asp-controller="Account" asp-action="Logout">
-            <input type="submit" value="Выход" />
-        </form>
-    }
+    <a class="main-menu__link" asp-controller="Home" asp-action="CheckOperations">Просмотреть список операций</a>
+    <br />
+    <form method="post" asp-controller="Account" asp-action="Logout">
+        <input type="submit" value="Выход" />
+    </form>
+}

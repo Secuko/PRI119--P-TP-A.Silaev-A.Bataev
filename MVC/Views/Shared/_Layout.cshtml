@@ -4,33 +4,49 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - MVC</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/reset.css" />
+    @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
+    <link rel="stylesheet" href="~/css/bootstrap-grid.css" />
+    <link rel="stylesheet" href="~/css/bootstrap.rtl.min.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MVC</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+    <nav class="navbar-menu">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-4">
+                    <a class="logo" href="/home/index">Волонтёры33</a>
+                </div>
+                <div class="col-4">
+                    <ul class="navbar-list">
+                        <li class="navbar-list__item"><a href="/home/index">Главная</a></li>
+                        <li class="navbar-list__item"><a href="/home/index">Новости</a></li>
+                        <li class="navbar-list__item"><a href="/home/index">О нас</a></li>
                     </ul>
                 </div>
+                <div class="col-4">
+                    @if (!(User.Identity.IsAuthenticated))
+                    {
+                        <div class="navbar__buttons">
+                            <a class="button navbar__button" asp-controller="Account" asp-action="Register">Регистрация</a>
+                            <a class="button navbar__button" asp-controller="Account" asp-action="Login">Войти</a>
+                        </div>
+                    }
+                    else
+                    {
+                    <div class="navbar__buttons">                   
+                        <a class="button navbar__button" asp-controller="Account" asp-action="EditProfile">Профиль</a>
+                        <form class="button-form navbar__button" method="post" asp-controller="Account" asp-action="Logout">
+                            <input class="button button-exit" type="submit"  value="Выход">
+                        </form>
+                    </div>
+                    }
+                </div>
             </div>
-        </nav>
-    </header>
+        </div>
+    </nav>
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-3 main-menu">
             @RenderBody()
         </main>
     </div>
