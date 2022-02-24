@@ -5,8 +5,9 @@
 
 <h1 class="display-4">Операции</h1>
 <br />
-<div class="operations-group">
-    <div class="container">
+<div class="container">
+    <div class="operations-group">
+
         <div class="operations-group__row">
             <span class="operations-group__label"
                   onclick="view('hd-1'); return false">Готовящиеся операции</span>
@@ -82,7 +83,7 @@
 </div>
 
 <br />
-<a class="btn btn-sm btn-secondary" asp-controller="Admin" asp-action="AdminPanel">Назад</a>
+<a class="main-link" asp-controller="Admin" asp-action="AdminPanel">Назад</a>
 
 <script>
     function view(n) {

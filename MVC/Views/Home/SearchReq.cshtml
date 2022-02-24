@@ -4,46 +4,52 @@
     string[] Sex = new[] { "Мужской", "Женский" };
 }
 
-<h2>Введите данные</h2>
+<h1 class="profile__title">Заявка на поиск</h1>
 
 <form method="post" asp-action="SearchReq" asp-controller="Home" asp-anti-forgery="true">
     <div class="validation" asp-validation-summary="ModelOnly"></div>
     <div>
         <div class="form-group">
-            <label asp-for="FullName" class="control-label">ФИО</label><br />
-            <input asp-for="FullName" class="form-control" />
+            <label asp-for="FullName" class="control-label profile__label">ФИО</label><br />
+            <input asp-for="FullName" class="form-control profile__input" />
             <span asp-validation-for="FullName"></span>
         </div>
+
         <div class="form-group">
-            <label asp-for="Age" class="control-label">Возраст</label><br />
-            <input asp-for="Age" class="form-control" />
+            <label asp-for="Age" class="control-label profile__label">Возраст</label><br />
+            <input asp-for="Age" class="form-control profile__input" />
             <span asp-validation-for="Age"></span>
         </div>
+
         <div class="form-group">
-            <label asp-for="Sex" class="control-label">Пол</label><br />
+            <label asp-for="Sex" class="control-label profile__label">Пол</label><br />
             @foreach (var sex in Sex)
             {
                 <input type="radio" asp-for="Sex" value="@sex" />@sex<br />
             }
             <span asp-validation-for="Sex"></span>
         </div>
+
         <div class="form-group">
-            <label asp-for="MissArea" class="control-label">Область пропажи</label><br />
-            <input asp-for="MissArea" class="form-control" />
+            <label asp-for="MissArea" class="control-label profile__label">Область пропажи</label><br />
+            <input asp-for="MissArea" class="form-control profile__input" />
             <span asp-validation-for="MissArea"></span>
         </div>
+
         <div class="form-group">
-            <label asp-for="MissTime" class="control-label">Время пропажи</label><br />
-            <input asp-for="MissTime" class="form-control" />
+            <label asp-for="MissTime" class="control-label profile__label">Время пропажи</label><br />
+            <input asp-for="MissTime" class="form-control profile__input" />
             <span asp-validation-for="MissTime"></span>
         </div>
+
         <div class="form-group">
-            <label asp-for="AddInf" class="control-label">Дополнительная информация</label><br />
-            <textarea asp-for="AddInf" class="form-control"></textarea>
+            <label asp-for="AddInf" class="control-label profile__label">Дополнительная информация</label><br />
+            <textarea asp-for="AddInf" class="form-control profile__input"></textarea>
             <span asp-validation-for="AddInf"></span>
         </div>
-        <div>
-            <input type="submit" value="Регистрация" />
-        </div>
+
+            <input type="submit" value="Регистрация" class="button-secondary profile__button" />
+
     </div>
 </form>
+<a class="main-link" asp-controller="Home" asp-action="Index">Назад</a>
