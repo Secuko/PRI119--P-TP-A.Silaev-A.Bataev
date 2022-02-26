@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -23,5 +24,7 @@ namespace MVC.ViewModels
         [Required(ErrorMessage = "Не указано время пропажи")]
         public string MissTime { get; set; }
         public string AddInf { get; set; }
+        [Required]
+        public IFormFile Photo { get; set; }
     }
 }

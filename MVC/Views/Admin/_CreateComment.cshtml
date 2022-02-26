@@ -1,0 +1,14 @@
+﻿@model MVC.Models.Comment
+
+<form method="post" asp-antiforgery="true" asp-action="CreateComment" asp-controller="Admin" asp-route-operationId="@Model.OperationId">
+    <div>
+        <div class="form-group">
+            <label asp-for="Text" class="control-label profile__label">Добавить информацию</label><br />
+            <textarea asp-for="Text" class="form-control profile__input"></textarea>
+            <span asp-validation-for="Text"></span>
+        </div>
+
+            <input type="submit" value="Добавить" class="button-secondary profile__button" />
+
+    </div>
+</form>

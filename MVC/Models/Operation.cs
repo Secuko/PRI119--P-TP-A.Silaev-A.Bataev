@@ -16,5 +16,6 @@ namespace MVC.Models
         [Required]
         public SearchRequest SearchRequest { get; set; }
         public List<User> Users { get; set; } = new List<User>();
+        public List<Comment> Comments { get; set; } = new List<Comment>();
     }
 }

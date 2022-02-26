@@ -3,19 +3,150 @@
     ViewData["Title"] = "Home Page";
 }
 
-<h1 class="display-4">Welcome</h1>
-
-@if (User.IsInRole("admin"))
-{
-    <a class="main-menu__link" asp-controller="Admin" asp-action="AdminPanel">Управление</a>
+@{
+    Layout = null;
 }
 
-@if (User.Identity.IsAuthenticated)
-{   
-    <a class="main-menu__link" asp-controller="Home" asp-action="SearchReq">Подать заявку на поиск</a>
-    @if (!User.IsInRole("volunteer"))
-    {
-        <a class="main-menu__link" asp-controller="Home" asp-action="VolReq">Стать волонтёром</a>
-    }
-    <a class="main-menu__link" asp-controller="Home" asp-action="CheckOperations">Просмотреть список операций</a>
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MVC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&display=swap"
+          rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/reset.css" />
+    @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
+    <link rel="stylesheet" href="~/css/bootstrap-grid.css" />
+    <link rel="stylesheet" href="~/css/bootstrap.rtl.min.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+<body>
+    <nav class="navbar-menu">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-4">
+                    <a class="logo" href="/home/index">Волонтёры33</a>
+                </div>
+                <div class="col-4">
+                    <ul class="navbar-list">
+                        <li class="navbar-list__item"><a href="/home/index">Главная</a></li>
+                        <li class="navbar-list__item"><a href="/home/index">Новости</a></li>
+                        <li class="navbar-list__item"><a href="/home/index">О нас</a></li>
+                    </ul>
+                </div>
+                <div class="col-4">
+                    @if (!(User.Identity.IsAuthenticated))
+                    {
+                        <div class="navbar__buttons">
+                            <a class="button navbar__button" asp-controller="Account" asp-action="Register">Регистрация</a>
+                            <a class="button navbar__button" asp-controller="Account" asp-action="Login">Войти</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="navbar__buttons">
+                            <a class="button navbar__button" asp-controller="Account" asp-action="EditProfile">Профиль</a>
+                            <form class="button-form navbar__button" method="post" asp-controller="Account" asp-action="Logout">
+                                <input class="button button-exit" type="submit" value="Выход">
+                            </form>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </nav>
+
+        <main role="main">
+            <section class="main-text">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-1"></div>
+                        <div class="col-6">
+                            <h3 class="main-text__title">Потеряться – не значит пропасть</h3>
+                            <p class="main-text__text paragraph">
+                                Поисково-спасательный отряд “Волонтёры33” ищет тех, кто
+                                потерялся в лесу и городе.
+                            </p>
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="search-req">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-1"></div>
+                        <div class="col">
+                            <p class="search-req__text paragraph">
+                                Наше движение организовывает поисковые операции, собирая отряд
+                                волонтёров
+                            </p>
+                        </div>
+                        <div class="col-2"></div>
+                        <div class="col-3">
+                            <a class="button main-button search-req__button"
+                               asp-controller="Home" asp-action="SearchReq">Заявка на поиск</a>
+                        </div>
+                        <div class="col-1"></div>
+                    </div>
+                </div>
+            </section>
+            <!-- /.search-req -->
+
+            <section class="vol-req">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-1"></div>
+                        <div class="col-3">
+                            <a class="button main-button vol-req__button" asp-controller="Home" asp-action="VolReq">Стать волонтёром</a>
+                        </div>
+                        <div class="col-2"></div>
+                        <div class="col-5">
+                            <p class="vol-req__text paragraph">
+                                Если хочешь стать частью нашего движения, то заполни форму
+                                регистрации волонтёра
+                            </p>
+                        </div>
+                        <div class="col-1"></div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="hr-line"></div>
+
+            <section class="main-operations">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-1"></div>
+                        <div class="col">
+                            <p class="main-operations__text">
+                                Ниже вы можете просмотреть список текущих операций, а также,
+                                имея статус волонтёра, присоединиться к поискам
+                            </p>
+                        </div>
+                        <div class="col-1"></div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-4 text-center">
+                            <a class="button main-button main-operations__button"
+                               asp-controller="Home" asp-action="CheckOperations">Список операций</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2022 - MVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+</html>

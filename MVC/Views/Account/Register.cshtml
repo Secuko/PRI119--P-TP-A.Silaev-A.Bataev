@@ -1,44 +1,52 @@
 ﻿@model MVC.ViewModels.RegisterModel
 
-<h2>Регистрация</h2>
-
-<form method="post" asp-action="Register" asp-controller="Account" asp-anti-forgery="true">
-    <div class="validation" asp-validation-summary="ModelOnly"></div>
-    <div>
-        <div class="form-group">
-            <label asp-for="Name" class="control-label">Имя</label><br />
-            <input asp-for="Name" class="form-control" />
-            <span asp-validation-for="Name"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="SurName" class="control-label">Фамилия</label><br />
-            <input asp-for="SurName" class="form-control" />
-            <span asp-validation-for="SurName"></span>
-        </div>
-        @* <div class="form-group">
-        @foreach (var sex in Sex)
-        {
-            <input type="radio" asp-for="Sex" value="@sex" />@sex<br />
-        }
-        <span asp-validation-for="Sex"></span>
-        </div> *@
-        <div class="form-group">
-            <label asp-for="Email" class="control-label">Электронный адрес</label><br />
-            <input asp-for="Email" class="form-control" />
-            <span asp-validation-for="Email"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Password" class="control-label">Пароль</label><br />
-            <input type="password" asp-for="Password" class="form-control" />
-            <span asp-validation-for="Password"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="PasswordConfirm">Повторите пароль</label><br />
-            <input type="password" asp-for="PasswordConfirm" class="form-control" />
-            <span asp-validation-for="PasswordConfirm" />
-        </div>
+<div class="profile-wrapper">
+    <h1 class="profile__title">Регистрация</h1>
+    <form method="post"
+          asp-action="Register"
+          asp-controller="Account"
+          asp-anti-forgery="true">
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
         <div>
-            <input type="submit" value="Регистрация" />
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label profile__label">Имя:</label><br />
+                <input asp-for="Name" class="form-control profile__input" />
+                <span asp-validation-for="Name"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="SurName" class="control-label profile__label">Фамилия:</label><br />
+                <input asp-for="SurName" class="form-control profile__input" />
+                <span asp-validation-for="SurName"></span>
+            </div>           
+
+            <div class="form-group">
+                <label asp-for="Email" class="control-label profile__label">Электронный адрес:</label><br />
+                <input asp-for="Email" class="form-control profile__input" />
+                <span asp-validation-for="Email"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Password" class="control-label profile__label">Пароль:</label><br />
+                <input type="password" asp-for="Password" class="form-control profile__input" />
+                <span asp-validation-for="Password"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PasswordConfirm" class="control-label profile__label">Повторите пароль:</label><br />
+                <input type="password" asp-for="PasswordConfirm" class="form-control profile__input" />
+                <span asp-validation-for="PasswordConfirm" />
+            </div>
+
+            <input type="submit"
+                   value="Регистрация"
+                   class="button-secondary profile__button" />
         </div>
+    </form>
+
+    <div class="profile__links">
+        <a class="main-link profile__main-link" asp-controller="Account" asp-action="Login">Войти</a>
+        <a class="main-link profile__main-link" asp-controller="Home" asp-action="Index">На главную</a>
     </div>
-</form>
+</div>

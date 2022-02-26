@@ -1,4 +1,8 @@
-﻿@model MVC.ViewModels.UserProfileViewModel
+﻿@model MVC.ViewModels.VolunteerProfileViewModel
+
+@{
+    string[] Sex = new[] { "Мужской", "Женский" };
+}
 
 <div class="profile-wrapper">
     <h1 class="profile__title">Профиль</h1>
@@ -24,6 +28,35 @@
                 <label asp-for="Email" class="control-label profile__label">Электронный адрес:</label><br />
                 <input asp-for="Email" class="form-control profile__input" />
                 <span asp-validation-for="Email"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Phone" class="control-label profile__label">Номер телефона:</label><br />
+                <input asp-for="Phone" class="form-control profile__input" />
+                <span asp-validation-for="Phone"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Age" class="control-label profile__label">Возраст:</label><br />
+                <input asp-for="Age" class="form-control profile__input" />
+                <span asp-validation-for="Age"></span>
+            </div>
+
+
+            <div class="form-group profile__input">
+                <label asp-for="Sex" class="control-label profile__label">Пол</label><br />
+                @foreach (var sex in Sex)
+                {
+                    <label asp-for="Sex" class="control-label profile__label">@sex</label>
+                    <input class="form-check-inline" type="radio" asp-for="Sex" value="@sex" /><br />
+                }
+                <span asp-validation-for="Sex"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="LivArea" class="control-label profile__label">Область проживания:</label><br />
+                <input asp-for="LivArea" class="form-control profile__input" />
+                <span asp-validation-for="LivArea"></span>
             </div>
 
             <input type="submit"

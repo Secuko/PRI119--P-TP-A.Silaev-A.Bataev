@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +7,7 @@ using MVC.Models;
 using MVC.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,12 +18,14 @@ namespace MVC.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly ApplicationContext _db;
+        IWebHostEnvironment _appEnvironment;
 
-        public AdminController(UserManager<User> userManager, ApplicationContext db)
+        public AdminController(UserManager<User> userManager, ApplicationContext db, IWebHostEnvironment appEnvironment)
         {
             _userManager = userManager;
             _db = db;
-        }
+            _appEnvironment = appEnvironment;
+    }
 
         public IActionResult AdminPanel()
         {
@@ -178,6 +182,14 @@ namespace MVC.Controllers
         public async Task<ActionResult> DeclineSearchReq(int id)
         {
             SearchRequest searchReq = await _db.SearchRequests.FirstOrDefaultAsync(s => s.Id == id);
+
+            string path = _appEnvironment.WebRootPath + searchReq.Photo;
+            FileInfo photo = new FileInfo(path);
+            if (photo.Exists)
+            {
+                photo.Delete();
+            }
+
             _db.SearchRequests.Remove(searchReq);
             await _db.SaveChangesAsync();
             return RedirectToAction("ManageSearchReq");
@@ -206,5 +218,22 @@ namespace MVC.Controllers
             await _db.SaveChangesAsync();
             return RedirectToAction("GetOperations");
         }
+
+        public ActionResult CreateComment(int id)
+        {
+            return PartialView("_CreateComment", new Comment(){ OperationId = id } );
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateComment(Comment comment, int operationId)
+        {
+            comment.OperationId = operationId;
+            _db.Comments.Add(comment);
+            Operation operation = await _db.Operations.FirstOrDefaultAsync(o => o.Id == operationId);
+            operation.Comments.Add(comment);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("CheckOperations", "Home");
+        }
+
     }
 }

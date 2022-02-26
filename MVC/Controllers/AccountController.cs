@@ -15,10 +15,12 @@ namespace MVC.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
+        private readonly ApplicationContext _db;
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, ApplicationContext db)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _db = db;
         }
 
         [HttpGet]
@@ -101,12 +103,22 @@ namespace MVC.Controllers
         public async Task<IActionResult> EditProfile()
         {
             User user = await _userManager.GetUserAsync(User);
+            VolRequest volReq = await _db.VolRequests.FirstOrDefaultAsync(v => v.UserId == user.Id);
             if (user == null)
             {
                 return NotFound();
             }
-            UserProfileViewModel model = new UserProfileViewModel { Email = user.Email, Name = user.Name, SurName = user.SurName };
-            return View(model);
+            if (User.IsInRole("volunteer"))
+            {
+                VolunteerProfileViewModel model = new VolunteerProfileViewModel { Email = user.Email, Name = user.Name, SurName = user.SurName, Phone = volReq.Phone, Age = volReq.Age,
+                                                                                  Sex = volReq.Sex, LivArea = volReq.LivArea };
+                return View("EditVolunteerProfile", model);
+            }
+            else
+            {
+                UserProfileViewModel model = new UserProfileViewModel { Email = user.Email, Name = user.Name, SurName = user.SurName };
+                return View(model);
+            }           
         }
 
         [HttpPost]
