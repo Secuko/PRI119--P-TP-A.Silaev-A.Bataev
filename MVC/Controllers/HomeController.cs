@@ -32,7 +32,7 @@ namespace MVC.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View(_db.Operations.Include(o => o.SearchRequest).Where(o => o.Status == "Активная" || o.Status == "Ожидание"));
         }
 
         [HttpGet]

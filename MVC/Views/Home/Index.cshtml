@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MVC.Models.User>
+﻿@model IEnumerable<MVC.Models.Operation>
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -150,21 +150,12 @@
                     <!-- Additional required wrapper -->
                     <div class="swiper-wrapper">
                         <!-- Slides -->
-                        <div class="swiper-slide">
-                            <img class="swiper-image" src="~/imgsearch/мяу.jpg" alt="" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img class="swiper-image" src="~/imgsearch/чел.png" alt="" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img class="swiper-image" src="~/imgsearch/человек1.png" alt="" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img class="swiper-image" src="~/imgsearch/человек2.jpg" alt="" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img class="swiper-image" src="~/imgsearch/человек3.png" alt="" />
-                        </div>
+                        @foreach (Operation op in Model)
+                        {
+                            <div class="swiper-slide">
+                                <img class="swiper-image" src="@op.SearchRequest.Photo" alt="" />
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
