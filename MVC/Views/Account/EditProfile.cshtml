@@ -36,7 +36,10 @@
            asp-controller="Account"
            asp-action="ChangePassword">Сменить пароль</a>
         @if (User.IsInRole("admin"))
-        {<a class="profile__main-link main-link" asp-controller="Admin" asp-action="AdminPanel">Управление</a>}
+        {
+         <a class="profile__main-link main-link" asp-controller="Admin" asp-action="AdminPanel">Управление</a>
+         <a class="profile__main-link main-link" asp-controller="Account" asp-action="GetChats">Чаты</a>
+        }
         <a class="main-link" asp-controller="Home" asp-action="Index">На главную</a>
     </div>
 </div>

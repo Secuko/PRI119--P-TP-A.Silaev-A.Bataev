@@ -18,7 +18,8 @@ namespace MVC.Models
         public string SurName { get; set; }
         public SearchRequest SearchRequest { get; set; }
         public VolRequest VolRequest { get; set; }
-        public List<Operation> Operations { get; set; } = new List<Operation>();  
+        public List<Operation> Operations { get; set; } = new List<Operation>();
+        public List<Chat> Chats { get; set; } = new List<Chat>();
         public User() { }
     }
 }

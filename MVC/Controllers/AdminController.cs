@@ -172,6 +172,11 @@ namespace MVC.Controllers
         {
             SearchRequest searchReq = await _db.SearchRequests.FirstOrDefaultAsync(s => s.Id == id);            
             searchReq.Status = "Принята";
+
+            Chat chat = new Chat() { SearchRequestId = searchReq.Id};
+            chat.Users.Add(await _userManager.GetUserAsync(User));
+            _db.Chats.Add(chat);
+
             Operation operation = new Operation() {Status = "Ожидание", SearchRequestId = searchReq.Id };
             _db.Operations.Add(operation);
             await _db.SaveChangesAsync();
@@ -213,8 +218,13 @@ namespace MVC.Controllers
         [HttpGet]
         public async Task<ActionResult> StopOperation(int id)
         {
-            Operation operation = await _db.Operations.FirstOrDefaultAsync(o => o.Id == id);
+            Operation operation = await _db.Operations
+                                .Include(o => o.SearchRequest)
+                                    .ThenInclude(s => s.Chat)              
+                                .FirstOrDefaultAsync(o => o.Id == id);
             operation.Status = "Завершённая";
+            Chat chat = await _db.Chats.FirstOrDefaultAsync(c => c.Id == operation.SearchRequest.Chat.Id);
+            _db.Chats.Remove(chat);
             await _db.SaveChangesAsync();
             return RedirectToAction("GetOperations");
         }

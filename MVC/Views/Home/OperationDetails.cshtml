@@ -50,7 +50,7 @@
 
     @if (User.IsInRole("volunteer") && !Model.Users.Contains(ViewBag.User))
     {
-        <a class="btn btn-sm btn-primary" asp-controller="Home" asp-action="JoinOperation" asp-route-id="@Model.Id">Присоединиться</a>
+        <a class="btn btn-sm btn-primary profile__main-link" asp-controller="Home" asp-action="JoinOperation" asp-route-id="@Model.Id">Присоединиться</a>
     }
     <a class="main-link profile__main-link" asp-action="CheckOperations">Назад</a>
 

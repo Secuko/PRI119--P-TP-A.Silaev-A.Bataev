@@ -1,0 +1,60 @@
+﻿@model MVC.Models.Chat
+
+@{ 
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MVC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&display=swap"
+          rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/reset.css" />
+    @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
+    <link rel="stylesheet" href="~/css/bootstrap-grid.css" />
+    <link rel="stylesheet" href="~/css/bootstrap.rtl.min.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+<body>
+    <div class="container">
+        <div class="chat">
+            <div class="chat-body">
+
+                @foreach (var mess in Model.Messages)
+                {
+                    <div class="message">
+                        <span class="message__username">@mess.UserName:</span>
+                        <p class="message__text">@mess.Text</p>
+                        <span class="message__time">@mess.Timestamp</span>
+                    </div>
+                }
+
+            </div>
+            
+            <form asp-controller="Account" asp-action="CreateMessage" asp-route-id="@Model.Id" method="post">
+                <div class="chat-input">
+                    <input name="Text" type="text" class="chat__input" />
+                    <button type="submit" class="chat__button">Отправить</button>
+                </div>
+            </form>      
+            
+
+            <a asp-controller="Account" asp-action="EditProfile" class="chat__arrow-link">
+                <img class="chat__arrow-back" src="/img/arrow-back.png" alt="" />
+            </a>
+        </div>
+        
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+</html>
+

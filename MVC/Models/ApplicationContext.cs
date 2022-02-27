@@ -13,7 +13,9 @@ namespace MVC.Models
         public DbSet<VolRequest> VolRequests { get; set; }
         public DbSet<Operation> Operations { get; set; }
         public DbSet<Comment> Comments { get; set; }
-        
+        public DbSet<Chat> Chats { get; set; }
+        public DbSet<Message> Messages { get; set; }
+
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)
         {

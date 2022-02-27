@@ -27,6 +27,7 @@ namespace MVC.Models
         public string Photo { get; set; }
         [Required]
         public string Status { get; set; }
+        public Chat Chat { get; set; }
         [Required]
         public string UserId { get; set; }
         public User User { get; set; }

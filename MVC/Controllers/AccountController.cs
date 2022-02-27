@@ -8,6 +8,9 @@ using MVC.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using System.Linq;
+using System;
 
 namespace MVC.Controllers
 {
@@ -100,16 +103,17 @@ namespace MVC.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [Authorize]
         public async Task<IActionResult> EditProfile()
         {
-            User user = await _userManager.GetUserAsync(User);
-            VolRequest volReq = await _db.VolRequests.FirstOrDefaultAsync(v => v.UserId == user.Id);
+            User user = await _userManager.GetUserAsync(User);           
             if (user == null)
             {
                 return NotFound();
             }
             if (User.IsInRole("volunteer"))
             {
+                VolRequest volReq = await _db.VolRequests.FirstOrDefaultAsync(v => v.UserId == user.Id);
                 VolunteerProfileViewModel model = new VolunteerProfileViewModel { Email = user.Email, Name = user.Name, SurName = user.SurName, Phone = volReq.Phone, Age = volReq.Age,
                                                                                   Sex = volReq.Sex, LivArea = volReq.LivArea };
                 return View("EditVolunteerProfile", model);
@@ -121,6 +125,7 @@ namespace MVC.Controllers
             }           
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> EditProfile(EditUserViewModel model)
         {
@@ -185,5 +190,31 @@ namespace MVC.Controllers
             }
             return View(model);
         }
+
+        [Authorize(Roles = "admin,volunteer")]
+        public async Task<IActionResult> GetChats()
+        {
+            User user = await _userManager.GetUserAsync(User);
+            return View(_db.Chats.Include(c => c.SearchRequest).Where(c => c.Users.Contains(user)));
+        }
+
+        [Authorize(Roles = "admin,volunteer")]
+        public async Task<IActionResult> OpenChat(int id)
+        {
+            Chat chat = await _db.Chats.Include(c => c.Messages).FirstOrDefaultAsync(c => c.Id == id);
+            return View(chat);
+        }
+
+        [Authorize(Roles = "admin,volunteer")]
+        public async Task<IActionResult> CreateMessage(int id, string text)
+        {
+            Chat chat = await _db.Chats.FirstOrDefaultAsync(c => c.Id == id);          
+            User user = await _userManager.GetUserAsync(User);
+            Message message = new Message() { ChatId = id, Text = text, Timestamp = DateTime.Now, UserName = $"{user.Name} {user.SurName}", UserId = user.Id };
+            chat.Messages.Add(message);
+            _db.Messages.Add(message);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("OpenChat", "Account", message.Chat);
+        }      
     }
 }

@@ -112,11 +112,18 @@ namespace MVC.Controllers
         public async Task<IActionResult> JoinOperation(int id)
         {
             User user = await _userManager.GetUserAsync(User);
-            Operation operation = await _db.Operations.FirstOrDefaultAsync(o => o.Id == id);
+            Operation operation = await _db.Operations
+                                            .Include(o => o.SearchRequest)
+                                                .ThenInclude(s => s.Chat)
+                                                    .ThenInclude(c => c.Users)
+                                            .FirstOrDefaultAsync(o => o.Id == id);
+
             if (user == null || operation == null)
             {
                 return NotFound();
             }
+
+            operation.SearchRequest.Chat.Users.Add(user);
             operation.Users.Add(user);
             await _db.SaveChangesAsync();
             return RedirectToAction("OperationDetails", "Home", new { id = id });

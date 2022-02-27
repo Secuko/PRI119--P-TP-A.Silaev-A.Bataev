@@ -4,14 +4,16 @@ using MVC.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MVC.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20220227165456_ChatAndMessage")]
+    partial class ChatAndMessage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,13 +46,7 @@ namespace MVC.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SearchRequestId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("SearchRequestId")
-                        .IsUnique();
 
                     b.ToTable("Chats");
                 });
@@ -455,17 +451,6 @@ namespace MVC.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MVC.Models.Chat", b =>
-                {
-                    b.HasOne("MVC.Models.SearchRequest", "SearchRequest")
-                        .WithOne("Chat")
-                        .HasForeignKey("MVC.Models.Chat", "SearchRequestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("SearchRequest");
-                });
-
             modelBuilder.Entity("MVC.Models.Comment", b =>
                 {
                     b.HasOne("MVC.Models.Operation", "Operation")
@@ -601,11 +586,6 @@ namespace MVC.Migrations
             modelBuilder.Entity("MVC.Models.Operation", b =>
                 {
                     b.Navigation("Comments");
-                });
-
-            modelBuilder.Entity("MVC.Models.SearchRequest", b =>
-                {
-                    b.Navigation("Chat");
                 });
 
             modelBuilder.Entity("MVC.Models.User", b =>

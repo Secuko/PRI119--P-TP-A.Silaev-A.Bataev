@@ -1,0 +1,19 @@
+﻿@model IEnumerable<MVC.Models.Chat>
+
+<h1 class="display-4">Текущие чаты</h1>
+
+<table class="table">
+    <tr><th>Чат</th><th></th><th></th></tr>
+    @foreach (var chat in Model)
+    {
+        <tr>
+            <td>@chat.SearchRequest.FullName</td>
+            <td>
+                <a class="btn btn-sm btn-primary" asp-controller="Account" asp-action="OpenChat" asp-route-id="@chat.Id">Просмотреть</a>
+            </td>
+        </tr>
+    }
+</table>
+<br />
+
+<a class="main-link profile__main-link" asp-controller="Account" asp-action="EditProfile">Назад</a>
