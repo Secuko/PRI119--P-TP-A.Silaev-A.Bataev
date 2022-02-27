@@ -232,8 +232,17 @@ namespace MVC.Controllers
             Operation operation = await _db.Operations.FirstOrDefaultAsync(o => o.Id == operationId);
             operation.Comments.Add(comment);
             await _db.SaveChangesAsync();
-            return RedirectToAction("CheckOperations", "Home");
+            return RedirectToAction("OperationDetails", "Home", operation);
         }
+
+        public async Task<ActionResult> DeleteComment(int id)
+        {
+            Comment comm = await _db.Comments.Include(c => c.Operation).FirstOrDefaultAsync(c => c.Id == id);
+            _db.Comments.Remove(comm);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("OperationDetails", "Home", comm.Operation);
+        }
+
 
     }
 }

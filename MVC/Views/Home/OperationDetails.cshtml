@@ -52,7 +52,7 @@
     {
         <a class="btn btn-sm btn-primary" asp-controller="Home" asp-action="JoinOperation" asp-route-id="@Model.Id">Присоединиться</a>
     }
-    <a class="main-link" asp-action="CheckOperations">Назад</a>
+    <a class="main-link profile__main-link" asp-action="CheckOperations">Назад</a>
 
 
     @if (User.IsInRole("admin"))
@@ -62,14 +62,19 @@
 
     @*<a class="main-link" asp-controller="Admin" asp-action="CreateComment" asp-route-id="@Model.Id">Добавить комментарий</a>*@
 
+
+<table class="table">
     @foreach (var comm in Model.Comments)
     {
-        <table class="table">
-            <tr>
-                <td>@comm.Text</td>
-            </tr>
-        </table>
+        <tr>
+            <td>>@comm.Text</td>
+            @if (User.IsInRole("admin"))
+            {
+                <td><a class="btn btn-sm btn-danger" asp-controller="Admin" asp-action="DeleteComment" asp-route-id="@comm.Id">Удалить</a></td>
+            }
+        </tr>
 
     }
+</table>
 
     
