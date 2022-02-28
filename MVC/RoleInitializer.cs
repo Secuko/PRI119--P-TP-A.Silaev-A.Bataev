@@ -11,7 +11,7 @@ namespace MVC
     {
         public static async Task InitializeAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
-            string adminEmail = "admin@mail.com";
+            string adminEmail = "admin2@mail.com";
             string password = "_Aa123456";
             if (await roleManager.FindByNameAsync("admin") == null)
             {
@@ -33,6 +33,7 @@ namespace MVC
                 if (result.Succeeded)
                 {
                     await userManager.AddToRoleAsync(admin, "admin");
+                    await userManager.AddToRoleAsync(admin, "user");
                 }
             }
         }

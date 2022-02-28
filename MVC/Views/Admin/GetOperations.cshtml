@@ -20,7 +20,7 @@
                         {
                             <tr>
                                 <td>@operation.SearchRequest.FullName</td>
-                                <td>@operation.SearchRequest.Status</td>
+                                <td>@operation.Status</td>
                                 <td>
                                     <a class="btn btn-sm btn-outline-primary" asp-controller="Admin" asp-action="StartOperation" asp-route-id="@operation.Id">Начать</a>
                                     <a class="btn btn-sm btn-outline-secondary" asp-controller="Home" asp-action="OperationDetails" asp-route-id="@operation.Id">Просмотреть</a>
@@ -44,7 +44,7 @@
                         {
                             <tr>
                                 <td>@operation.SearchRequest.FullName</td>
-                                <td>@operation.SearchRequest.Status</td>
+                                <td>@operation.Status</td>
                                 <td>
                                     <a class="btn btn-sm btn-outline-secondary" asp-controller="Admin" asp-action="StopOperation" asp-route-id="@operation.Id">Завершить</a>
                                     <a class="btn btn-sm btn-outline-secondary" asp-controller="Home" asp-action="OperationDetails" asp-route-id="@operation.Id">Просмотреть</a>
@@ -69,7 +69,7 @@
                         {
                             <tr>
                                 <td>@operation.SearchRequest.FullName</td>
-                                <td>@operation.SearchRequest.Status</td>
+                                <td>@operation.Status</td>
                                 <td>
                                     <a class="btn btn-sm btn-outline-secondary" asp-controller="Home" asp-action="OperationDetails" asp-route-id="@operation.Id">Просмотреть</a>
                                 </td>

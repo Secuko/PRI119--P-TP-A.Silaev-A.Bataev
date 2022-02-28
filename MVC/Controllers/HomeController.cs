@@ -128,13 +128,6 @@ namespace MVC.Controllers
             await _db.SaveChangesAsync();
             return RedirectToAction("OperationDetails", "Home", new { id = id });
         }
-
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 
 }

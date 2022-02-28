@@ -25,7 +25,7 @@ namespace MVC.Controllers
             _userManager = userManager;
             _db = db;
             _appEnvironment = appEnvironment;
-    }
+        }
 
         public IActionResult AdminPanel()
         {
