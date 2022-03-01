@@ -9,7 +9,6 @@ namespace MVC.ViewModels
 {
     public class SearchRequestViewModel
     {
-        public int Id { get; set; }
         [Required(ErrorMessage = "Не указано ФИО")]
         public string FullName { get; set; }
 
