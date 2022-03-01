@@ -48,19 +48,19 @@
     </tr>
 </table>
 
-    @if (User.IsInRole("volunteer") && !Model.Users.Contains(ViewBag.User))
-    {
-        <a class="btn btn-sm btn-primary profile__main-link" asp-controller="Home" asp-action="JoinOperation" asp-route-id="@Model.Id">Присоединиться</a>
-    }
-    <a class="main-link profile__main-link" asp-action="CheckOperations">Назад</a>
+@if (User.IsInRole("volunteer") && !Model.Users.Contains(ViewBag.User))
+{
+    <a class="btn btn-sm btn-primary profile__main-link" asp-controller="Home" asp-action="JoinOperation" asp-route-id="@Model.Id">Присоединиться</a>
+}
+<a class="main-link profile__main-link" asp-action="CheckOperations">Назад</a>
 
 
-    @if (User.IsInRole("admin"))
-    {
-        @await Html.PartialAsync("~/Views/Admin/_CreateComment.cshtml", new Comment() { OperationId = Model.Id })
-    }
+@if (User.IsInRole("admin"))
+{
+    @await Html.PartialAsync("~/Views/Admin/_CreateComment.cshtml", new Comment() { OperationId = Model.Id })
+}
 
-    @*<a class="main-link" asp-controller="Admin" asp-action="CreateComment" asp-route-id="@Model.Id">Добавить комментарий</a>*@
+@*<a class="main-link" asp-controller="Admin" asp-action="CreateComment" asp-route-id="@Model.Id">Добавить комментарий</a>*@
 
 
 <table class="table">
@@ -77,4 +77,6 @@
     }
 </table>
 
-    
+@section Scripts {@await Html.PartialAsync("_ValidationScriptsPartial")}
+
+

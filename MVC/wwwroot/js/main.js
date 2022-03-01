@@ -1,6 +1,6 @@
 var isLoop = true;
 
-if (document.querySelectorAll(".swiper-slide").length < 3) {
+if (document.querySelectorAll(".swiper-slide").length < 4) {
   isLoop = false;
 }
 
