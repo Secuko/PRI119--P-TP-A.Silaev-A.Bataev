@@ -61,9 +61,9 @@ namespace MVC.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login(string returnUrl = null)
+        public IActionResult Login()
         {
-            return View(new LoginModel { ReturnUrl = returnUrl });
+            return View();
         }
 
         [HttpPost]
@@ -75,16 +75,8 @@ namespace MVC.Controllers
                 var result =
                     await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
-                {
-                    // проверяем, принадлежит ли URL приложению
-                    if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
-                    {
-                        return Redirect(model.ReturnUrl);
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
+                {                  
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
